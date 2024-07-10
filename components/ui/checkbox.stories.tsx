@@ -1,5 +1,7 @@
-import {Meta, StoryObj} from "@storybook/react";
+import {expect} from "@storybook/jest";
 
+import {Meta, StoryObj} from "@storybook/react";
+import {within, userEvent} from "@storybook/testing-library";
 import {Checkbox} from "./checkbox";
 
 const meta: Meta<typeof Checkbox> = {
@@ -40,6 +42,18 @@ export const Default: Story = {
       </label>
     </div>
   ),
+  play: async ({canvasElement}) => {
+    const canvas = within(canvasElement);
+    const checkbox = canvas.getByRole("checkbox", {
+      name: /Accept terms and conditions/i,
+    });
+
+    await userEvent.click(checkbox);
+    expect(checkbox).toBeChecked();
+
+    await userEvent.click(checkbox);
+    expect(checkbox).not.toBeChecked();
+  },
 };
 
 export const Disabled: Story = {
@@ -58,4 +72,13 @@ export const Disabled: Story = {
       </label>
     </div>
   ),
+  play: async ({canvasElement}) => {
+    const canvas = within(canvasElement);
+    const checkbox = canvas.getByRole("checkbox", {
+      name: /Accept terms and conditions/i,
+    });
+
+    await userEvent.click(checkbox);
+    expect(checkbox).not.toBeChecked();
+  },
 };
